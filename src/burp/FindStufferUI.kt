@@ -31,8 +31,8 @@ class FindStufferUI : ITab, IMessageEditorController {
     private val historyScrollPane = JScrollPane(historyTable)
     // tabs with request/response viewers
     private val requestAndResponseEditors = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
-    private val requestViewer = callbacks.createMessageEditor(null, false)
-    private val responseViewer = callbacks.createMessageEditor(null, false)
+    private val requestViewer = callbacks.createMessageEditor(this, false)
+    private val responseViewer = callbacks.createMessageEditor(this, false)
     // Search modal
     private val searchModal = FindStufferSearchModal(this)
 
