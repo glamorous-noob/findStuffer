@@ -2,17 +2,24 @@
 FindStuffer, a Burp extension that finds stuff. 
 ## Why FindStuffer
 When using Brup's built-in search modals in the Proxy or the Logger tabs, there are some limitations. This extension aims to overcome these limitations, without aiming to replace the original Burp search functionalities (because why work too much ?)
-## Todo list
+## Demo
+TODO
+## Lists
+### ToDo list
 Here are the things that are meant to be implemented in FindStuffer :
 - [x]  Choosing the scope of a text query: request, response, both or any (the latter being Burp's only built-in option AFAIK)
 - [ ]  Chaining text queries, the same way one can pipe `grep` commands together on UNIX (`cat | grep aaaa | grep bbb | grep -v cccc`). This is basically combining the queries with a "boolean and" logic.
-- [ ] BONUS: Make the extension less ugly
-- [ ] BONUS: Filetring on hosts. Can be done anyway with the previous two points
-- [ ] BONUS: Combining text queries with a "boolean or" logic.
-- [ ] BONUS: Re-implement some basic non-textual filtering capabilities like filtering over response codes
 
-What I am **NOT** willing to do short-term:
-- Implementing regex-based searches, because that's a hassle
+### Bonus list
+Bonus objectives are objectives that I recognize as "nice", but am not motivated enough to code : 
+- [ ] BONUS: Make the extension less ugly. I hate coding UI.
+- [ ] BONUS: Filtering on hosts. Can be done with a normal text query, but would be faster with a dedicated field.
+- [ ] BONUS: Combining text queries with a "boolean or" logic. I think it's more stylish than useful.
+- [ ] BONUS: Re-implement some basic non-textual filtering capabilities like filtering over response codes. Burp's built-in search modal does that fine.
+- [ ] BONUS: Implementing regex-based searches. It might be a pain to code.
+
+### ToNotDo list
+This is the list of things I have **really** no intention of doing
 - Coding **_all_** of Burp's existing search options, because that's a waste of time
 - Adding a proxy or HTTP listener, because it adds work without any real value to the use cases
 
