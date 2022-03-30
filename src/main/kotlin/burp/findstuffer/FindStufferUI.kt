@@ -1,10 +1,10 @@
 package burp.findstuffer
 
+import burp.BurpExtender.Companion.callbacks
 import burp.IHttpRequestResponse
 import burp.IHttpService
 import burp.IMessageEditorController
 import burp.ITab
-import burp.BurpExtender.Companion.callbacks
 import burp.findstuffer.rowfilters.*
 import java.awt.*
 import java.awt.event.MouseEvent
@@ -21,7 +21,7 @@ import javax.swing.*
 // Build the UI for the search dialog
 // Build the refresh history button
 class FindStufferUI : ITab, IMessageEditorController {
-    private val NO_APPLIED_FILTERS : String = "No applied filters."
+    private val NO_APPLIED_FILTERS: String = "No applied filters."
 
     // TODO revisit these components and experiment with other swing classes that might be more relevant than JPanel
     // search bar and history reset button panel
@@ -29,15 +29,19 @@ class FindStufferUI : ITab, IMessageEditorController {
     private val toolBar = JPanel()
     private val searchBar = JTextField()
     private val historyResetButton = JButton("Repopulate")
+
     // main split pane
     private val historyAndEditorsSplitPane = JSplitPane(JSplitPane.VERTICAL_SPLIT)
+
     // table of log entries
     private val historyTable = HistoryTable(HistoryTableModel(), this)
     private val historyScrollPane = JScrollPane(historyTable)
+
     // tabs with request/response viewers
     private val requestAndResponseEditors = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
     private val requestViewer = callbacks.createMessageEditor(this, false)
     private val responseViewer = callbacks.createMessageEditor(this, false)
+
     // Search modal
     private val searchModal = SearchModal(this)
 
@@ -56,7 +60,8 @@ class FindStufferUI : ITab, IMessageEditorController {
         )
         toolBar.add(searchBar, BorderLayout.CENTER)
         historyResetButton.preferredSize = Dimension(200, 30)
-        historyResetButton.toolTipText = "Repopulates table entries according to the current state of the proxy history."
+        historyResetButton.toolTipText =
+            "Repopulates table entries according to the current state of the proxy history."
         toolBar.add(historyResetButton, BorderLayout.LINE_END)
 
         // The history logs + the request and response editors
@@ -115,7 +120,7 @@ class FindStufferUI : ITab, IMessageEditorController {
     }
 
     //TODO add more stuff here if needed
-    fun tableSelectionCleared(){
+    fun tableSelectionCleared() {
         emptyRequestResponseViewers()
     }
 
@@ -146,20 +151,14 @@ class FindStufferUI : ITab, IMessageEditorController {
     }
 
     //TODO !!!
-    fun executeSearch(text: String, scope: SearchQueryScope) {
-        if(text.isNotEmpty()){
-            val filter : IRowFilter = when(scope){
-                SearchQueryScope.REQUEST -> TextRequestFilter(text)
-                SearchQueryScope.RESPONSE -> TextResponseFilter(text)
-                SearchQueryScope.REQUEST_AND_RESPONSE -> TextBothFilter(text)
-                SearchQueryScope.REQUEST_OR_RESPONSE -> TextAnyFilter(text)
-            }
-            historyTable.useFilter(filter)
-            searchBar.text = filter.toString()
-        }
-        else{
+    fun executeSearch(queries: List<TextQuery>) {
+        if(queries.all { it.isEmpty() }){
             historyTable.clearFilters()
             searchBar.text = NO_APPLIED_FILTERS
+        } else {
+            val filter = RowFilterFactory().getAggregatedTextFilters(queries)
+            historyTable.useFilter(filter)
+            searchBar.text = "Searching for $filter"
         }
     }
 

@@ -77,7 +77,7 @@ class HistoryTableModel : AbstractTableModel() {
     fun resetContent(data: Array<IHttpRequestResponse>) {
         allRows = data.mapIndexed { index, element -> HistoryRowData(index+1, element) }
         appliedFilter?.let {
-            useNewFilter(it) // reapply current filter if not null, sorting is included in useNewFilter
+            useNewFilters(it) // reapply current filter if not null, sorting is included in useNewFilter
         } ?: run {
             filteredSortedRows = allRows.toMutableList()
             reapplyCurrentSorting() // sort if necessary
@@ -149,7 +149,7 @@ class HistoryTableModel : AbstractTableModel() {
     // Simple implementation
     //TODO improve this. Or create a useAdditionalFilter function ?
     //TODO is it really the best choice to systematically couple filtering with sorting here ?
-    fun useNewFilter(filter: IRowFilter) {
+    fun useNewFilters(filter: IRowFilter) {
         filteredSortedRows = allRows.filter { row  -> filter.rowMeetsCriteria(row) }.toMutableList()
         appliedFilter = filter
         reapplyCurrentSorting()

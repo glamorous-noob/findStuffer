@@ -11,7 +11,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
     JDialog(null, "Let's find stuff", ModalityType.APPLICATION_MODAL) {
     //TODO do a real implementation for this. The idea is for the user to be able to dynamically add search fields to
     // the modal via some button
-    private var searchFields = arrayListOf<TextSearchField>()
+    private var searchFields = arrayListOf<TextQueryField>()
     var nextSearchFieldContainer: Container
 
     init {
@@ -45,7 +45,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
 
     private fun addSearchField() {
         callbacks.issueAlert("Size is ${searchFields.size}")
-        val searchField = TextSearchField()
+        val searchField = TextQueryField()
         searchFields.add(searchField)
         callbacks.issueAlert("Now it is ${searchFields.size}")
         nextSearchFieldContainer.add(searchField, BorderLayout.PAGE_START)
@@ -60,7 +60,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
 
     //TODO probably create a searchQuery class that holds the information needed, and pass it to the main UI
     private fun executeSearch() {
-        mainUI.executeSearch(searchFields[0].text, searchFields[0].scope)
+        mainUI.executeSearch(searchFields.map { sf -> sf.query })
         isVisible = false
     }
 

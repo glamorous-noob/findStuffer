@@ -1,10 +1,10 @@
 package burp.findstuffer.rowfilters
 
 import burp.findstuffer.HistoryRowData
-import burp.findstuffer.SearchQueryScope
+import burp.findstuffer.TextQueryScope
 
 class TextBothFilter(stringQuery : String)  : TextFilter(stringQuery) {
-    override val scope = SearchQueryScope.REQUEST_AND_RESPONSE
+    override val scope = TextQueryScope.REQUEST_AND_RESPONSE
 
     override fun rowMeetsCriteria(row: HistoryRowData): Boolean {
         var smallData: ByteArray

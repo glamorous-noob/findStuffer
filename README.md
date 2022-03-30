@@ -1,37 +1,13 @@
 # FindStuffer
 FindStuffer, a Burp extension that finds stuff. 
 ## Why FindStuffer
-When using Brup's built-in search modals in the Proxy or the Logger tabs, there are some limitations. This extension aims to overcome these limitations, without aiming to replace the original Burp search functionalities (because why work too much ?)
-## Demo
+When using Brup's built-in search modals in the Proxy or the Logger tabs, there are some limitations. This extension aims to overcome these limitations, with no intention to replace the original Burp search functionalities (because why would I work to do that ?)
+## Demo & How to use
 TODO
-## Lists
-### ToDo list
-Here are the things that are meant to be implemented in FindStuffer :
-- [x]  Choosing the scope of a text query: request, response, both or any (the latter being Burp's only built-in option AFAIK)
-- [ ]  Chaining text queries, the same way one can pipe `grep` commands together on UNIX (`cat | grep aaaa | grep bbb | grep -v cccc`). This is basically combining the queries with a "boolean and" logic.
-
-### Bonus list
-Bonus objectives are objectives that I recognize as "nice", but am not motivated enough to code : 
-- [ ] BONUS: Make the extension less ugly. I hate coding UI.
-- [ ] BONUS: Filtering on hosts. Can be done with a normal text query, but would be faster with a dedicated field.
-- [ ] BONUS: Combining text queries with a "boolean or" logic. I think it's more stylish than useful.
-- [ ] BONUS: Re-implement some basic non-textual filtering capabilities like filtering over response codes. Burp's built-in search modal does that fine.
-- [ ] BONUS: Implementing regex-based searches. It might be a pain to code.
-
-### ToNotDo list
-This is the list of things I have **really** no intention of doing
-- Coding **_all_** of Burp's existing search options, because that's a waste of time
-- Adding a proxy or HTTP listener, because it adds work without any real value to the use cases
-
-If you want something added to FindStuffer that you think would be useful, feel free to suggest a PR or open an issue.
 ## Installation
-TODO
-## Contribution
-TODO
-## Known issues
-TODO
+At this moment, you need to compile this code to create a JAR and import manually from Extender → Extensions → Add. A JAR will be added soon to this project's releases page. I still haven't looked into add this to the BApp store.
 ## Use cases
-Some of the situations that led me to coding this, in projects containing 10k-20k+ requests.
+Some of the situations that led me to coding this. These happened in projects containing 10k-20k+ requests.
 ### Use case 1
 I wanted to look for HTTP responses that contained the `Strict-Transport-Security` header, but did **not** have 31536000 configured for `max-age`. I solved it by doing a regex search with negative lookahead (`^Strict-Transport-Security(?!.*31536000.*)`), which was annoying because:
 - I do not use negative lookaheads a lot, so I have to research them every time I need them.
@@ -47,5 +23,38 @@ I wanted to find an HTTP response containing some word (let's say, baguette), bu
 
 Hopefully, with FindStuffer, this kind of thing will be pretty easy to handle, since both queries can be combined in one search.
 ### Use case 3
-I am working on a project including many domains, and I won't to do a search query only on requests targeting a specific domain.
+I am working on a project including many domains, and I want to apply a text query on the body of requests targeting only a specific domain.
 
+## Contributing
+If you like the extension and the potential it has to be practical tool you use often, you are very welcome to contribute to this repo by submitting a PR. You can also open issues if you encounter bugs or have interesting feature ideas.
+
+But before doing that, please read this section carefully to get an idea of what's planned / what's already being currently worked on.
+
+### Known issues
+None so far. We rock (or we are ignorant of our own demise.)
+### Implemented Features
+- Choosing the scope of a text query: request, response, both or any.
+- Chaining text queries (aggregation using boolean AND logic), similar to piping grep commands together on UNIX.
+### On the roadmap
+This section is about features that are currently being developed / officially on the roadmap:
+- [ ]  Implement "negative queries" per text field
+- [ ]  Allow the aggregation of queries using boolean OR logic instead of a boolean AND
+- [ ]  Impelement the ability to delete a text field. The only way of deleting unused text fields is by unloading and reloading the extension.
+### Dev Ideas
+This section is about features that I recognize as potentially useful and intend to work on some time, without them being a priority. Some of these features can be replaced by celver use of the basic features already implemented. Some do add a lot of value but will need a serious amount of work.
+#### Listeners
+It would be nice if the extension registers a proxy or HTTP listener to refresh the tables entires automatically as new HTTP traffic is generated. This however must:
+- be thread-safe
+- take into account existing sorting and filtering
+- be memory-efficient
+A clever implementation of this could talke some serious amount of work.
+#### Global negative search
+Besides the negative query option available for each individual text field, implement the possibility of inverting the whole search.
+#### Columns list
+Choose which columns can be displayed / hidden. Also add more types of columns (e.g. mime types).
+#### Non-textual queries
+This is not the aim of this extension, but might as well make it more practical.
+#### Improve UI and UX
+This is really not my area and I hate it. But my extension is indeed ugly.
+### Dev & debug env setup
+TODO

@@ -97,7 +97,7 @@ class HistoryTable (
     }
 
     fun useFilter(filter: IRowFilter) {
-        tableModel.useNewFilter(filter)
+        tableModel.useNewFilters(filter)
         applyRowSelection()
     }
 
