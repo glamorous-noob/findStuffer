@@ -9,7 +9,15 @@ class BurpExtender : IBurpExtender {
     private lateinit var ui: FindStufferUI
     companion object {
         lateinit var callbacks: IBurpExtenderCallbacks
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            println("ok")
+            StartBurp.main(*args)
+        }
     }
+
+
 
     override fun registerExtenderCallbacks(callbacks: IBurpExtenderCallbacks) {
         Companion.callbacks = callbacks

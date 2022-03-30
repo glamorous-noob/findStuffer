@@ -12,6 +12,6 @@ open abstract class TextFilter(private val stringQuery : String) : IRowFilter {
     }
 
     override fun toString(): String {
-        return "Searching for $stringQuery in ${scope.toString().replace('_', ' ').lowercase()}."
+        return "Searching for $stringQuery in $scope."
     }
 }

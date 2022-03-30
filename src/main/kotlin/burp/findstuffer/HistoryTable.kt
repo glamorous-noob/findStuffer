@@ -2,7 +2,6 @@ package burp.findstuffer
 
 import burp.IHttpRequestResponse
 import burp.IHttpService
-import burp.BurpExtender.Companion.callbacks
 import burp.findstuffer.rowfilters.IRowFilter
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -45,7 +44,6 @@ class HistoryTable (
     private fun applyRowSelection(){
         selectedRowNumber?.let {
             val selectedRowIndex = tableModel.rowNumberToIndex(it)
-            callbacks.issueAlert("selected row number $it & index $selectedRowIndex")
             if(selectedRowIndex==null){
                 selectedRowNumber = null
                 clearSelection()
