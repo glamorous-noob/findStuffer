@@ -1,6 +1,9 @@
-package burp
+package burp.findstuffer
 
+import burp.IHttpRequestResponse
+import burp.IHttpService
 import burp.BurpExtender.Companion.callbacks
+import burp.findstuffer.rowfilters.IRowFilter
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JTable
@@ -8,16 +11,16 @@ import javax.swing.JTable
 /**
  * Find stuffer history table
  *
- * @property tableData
+ * @property tableModel
  * @property mainUI
  * @constructor Create empty Find stuffer history table
  */
-class FindStufferHistoryTable (
-    private val tableData: FindStufferTableModel,
-    private val mainUI: FindStufferUI ) : JTable(tableData) {
+class HistoryTable (
+    private val tableModel: HistoryTableModel,
+    private val mainUI: FindStufferUI
+) : JTable(tableModel) {
     // represents the selected "#" number
-    var selectedRowNumber : Int? = null
-        private set
+    private var selectedRowNumber : Int? = null
 
     init {
         tableHeader.addMouseListener(object : MouseAdapter(){
@@ -29,11 +32,11 @@ class FindStufferHistoryTable (
 
     private fun sortRowsByColumn(column: Int) {
         // Reset column names to default
-        for (i in 0 until tableData.columnCount){
-            tableHeader.columnModel.getColumn(i).headerValue = tableData.getColumnName(i)
+        for (i in 0 until tableModel.columnCount){
+            tableHeader.columnModel.getColumn(i).headerValue = tableModel.getColumnName(i)
         }
         // Sorting and setting new column name
-        tableHeader.columnModel.getColumn(column).headerValue = tableData.sort(column)
+        tableHeader.columnModel.getColumn(column).headerValue = tableModel.sort(column)
         tableHeader.repaint()
 
         applyRowSelection()
@@ -41,7 +44,7 @@ class FindStufferHistoryTable (
 
     private fun applyRowSelection(){
         selectedRowNumber?.let {
-            val selectedRowIndex = tableData.rowNumberToIndex(it)
+            val selectedRowIndex = tableModel.rowNumberToIndex(it)
             callbacks.issueAlert("selected row number $it & index $selectedRowIndex")
             if(selectedRowIndex==null){
                 selectedRowNumber = null
@@ -62,14 +65,14 @@ class FindStufferHistoryTable (
      * @param dataItems
      */
     fun initContent(dataItems: Array<IHttpRequestResponse>) {
-        tableData.initContent(dataItems)
+        tableModel.initContent(dataItems)
     }
 
     override fun changeSelection(row: Int, col: Int, toggle: Boolean, extend: Boolean) {
         // update the "#" number
-        selectedRowNumber = tableData.filteredSortedRows[row].number
+        selectedRowNumber = tableModel.filteredSortedRows[row].number
         // Tell the main UI the selection changed
-        mainUI.tableSelectionChanged(tableData.filteredSortedRows[row].data)
+        mainUI.tableSelectionChanged(tableModel.filteredSortedRows[row].data)
         super.changeSelection(row, col, toggle, extend)
     }
 
@@ -81,7 +84,7 @@ class FindStufferHistoryTable (
     fun resetContent(dataItems: Array<IHttpRequestResponse>) {
         selectedRowNumber=null
         clearSelection()
-        tableData.resetContent(dataItems)
+        tableModel.resetContent(dataItems)
         repaint()
     }
 
@@ -89,19 +92,19 @@ class FindStufferHistoryTable (
         selectedRowNumber?.let {
             //if the selected row number does not correspond to any existing row, that means I f***** up somewhere
             // Let's just return null silently and hope for the best. What's the worst that could happen, right? :)
-            val index = tableData.rowNumberToIndex(it) ?: return null
-            return tableData.filteredSortedRows[index].data.httpService
+            val index = tableModel.rowNumberToIndex(it) ?: return null
+            return tableModel.filteredSortedRows[index].data.httpService
         }
         return null
     }
 
-    fun useFilter(filter: IFindStufferRowFilter) {
-        tableData.useNewFilter(filter)
+    fun useFilter(filter: IRowFilter) {
+        tableModel.useNewFilter(filter)
         applyRowSelection()
     }
 
     fun clearFilters() {
-        tableData.clearFilters()
+        tableModel.clearFilters()
         applyRowSelection()
     }
 

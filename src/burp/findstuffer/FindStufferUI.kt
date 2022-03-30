@@ -1,6 +1,11 @@
-package burp
+package burp.findstuffer
 
+import burp.IHttpRequestResponse
+import burp.IHttpService
+import burp.IMessageEditorController
+import burp.ITab
 import burp.BurpExtender.Companion.callbacks
+import burp.findstuffer.rowfilters.*
 import java.awt.*
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
@@ -27,14 +32,14 @@ class FindStufferUI : ITab, IMessageEditorController {
     // main split pane
     private val historyAndEditorsSplitPane = JSplitPane(JSplitPane.VERTICAL_SPLIT)
     // table of log entries
-    private val historyTable = FindStufferHistoryTable(FindStufferTableModel(), this)
+    private val historyTable = HistoryTable(HistoryTableModel(), this)
     private val historyScrollPane = JScrollPane(historyTable)
     // tabs with request/response viewers
     private val requestAndResponseEditors = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
     private val requestViewer = callbacks.createMessageEditor(this, false)
     private val responseViewer = callbacks.createMessageEditor(this, false)
     // Search modal
-    private val searchModal = FindStufferSearchModal(this)
+    private val searchModal = SearchModal(this)
 
     // init components
     init {
@@ -143,9 +148,11 @@ class FindStufferUI : ITab, IMessageEditorController {
     //TODO !!!
     fun executeSearch(text: String, scope: SearchQueryScope) {
         if(text.isNotEmpty()){
-            lateinit var filter : IFindStufferRowFilter
-            when(scope){
-                SearchQueryScope.REQUEST -> filter = FindStufferRequestRowFilter(text)
+            val filter : IRowFilter = when(scope){
+                SearchQueryScope.REQUEST -> TextRequestFilter(text)
+                SearchQueryScope.RESPONSE -> TextResponseFilter(text)
+                SearchQueryScope.REQUEST_AND_RESPONSE -> TextBothFilter(text)
+                SearchQueryScope.REQUEST_OR_RESPONSE -> TextAnyFilter(text)
             }
             historyTable.useFilter(filter)
             searchBar.text = filter.toString()

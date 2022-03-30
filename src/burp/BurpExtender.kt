@@ -1,5 +1,6 @@
 package burp
 
+import burp.findstuffer.FindStufferUI
 import javax.swing.SwingUtilities
 
 //No need to implement a listener for now, the main use case is doing searches on existing logs.
