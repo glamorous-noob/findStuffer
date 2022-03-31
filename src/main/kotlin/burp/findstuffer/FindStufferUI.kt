@@ -158,7 +158,7 @@ class FindStufferUI : ITab, IMessageEditorController {
             historyTable.clearFilters()
             searchBar.text = NO_APPLIED_FILTERS
         } else {
-            val filter = RowFilterFactory().getAggregatedTextFilters(queries)
+            val filter = RowFilterFactory().getAndAggregatedTextFilters(queries)
             historyTable.useFilter(filter)
             searchBar.text = "Searching for $filter"
         }

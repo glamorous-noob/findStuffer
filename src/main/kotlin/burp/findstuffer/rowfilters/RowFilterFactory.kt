@@ -16,8 +16,8 @@ class RowFilterFactory {
         else filter
     }
 
-    fun getAggregatedTextFilters(textQueries : Collection<TextQuery>) : IRowFilter {
-        return RowFilterAggregator(
+    fun getAndAggregatedTextFilters(textQueries : Collection<TextQuery>) : IRowFilter {
+        return RowFilterAndAggregator(
             textQueries.filterNot { it.isEmpty() }
                 .map { getTextFilter(it) }
         )
