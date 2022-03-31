@@ -38,8 +38,8 @@ The search modal always pops up on the top left corner of the screen. I don't kn
 - Chaining text queries (aggregation using boolean AND logic), similar to piping grep commands together on UNIX.
 ### Current issues
 This section is about features that are currently being developed / officially on the roadmap:
-- [ ]  Implement "negative queries" per text field
-- [ ]  Allow the aggregation of queries using boolean OR logic instead of a boolean AND
+- [x]  Implement "negative queries" per text field
+- [x]  Allow the aggregation of queries using boolean OR logic instead of a boolean AND
 - [x]  Implement the ability to delete a text field. The only way of deleting unused text fields is by unloading and reloading the extension.
 ### Dev Ideas
 This section is about features that I recognize as potentially useful and intend to work on some time, without them being a priority. Some of these features can be replaced by celver use of the basic features already implemented. Some do add a lot of value but will need a serious amount of work.

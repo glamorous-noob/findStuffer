@@ -5,10 +5,14 @@ import burp.IHttpRequestResponse
 import burp.IHttpService
 import burp.IMessageEditorController
 import burp.ITab
-import burp.findstuffer.rowfilters.*
+import burp.findstuffer.rowfilters.RowFilterAggregationType
+import burp.findstuffer.rowfilters.RowFilterFactory
 import burp.findstuffer.search.SearchModal
 import burp.findstuffer.search.TextQuery
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Component
+import java.awt.Dimension
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import javax.swing.*
@@ -153,12 +157,12 @@ class FindStufferUI : ITab, IMessageEditorController {
     }
 
     //TODO !!!
-    fun executeSearch(queries: List<TextQuery>) {
-        if(queries.all { it.isEmpty() }){
+    fun executeSearch(queries: List<TextQuery>, aggregationType: RowFilterAggregationType) {
+        if (queries.all { it.isEmpty() }) {
             historyTable.clearFilters()
             searchBar.text = NO_APPLIED_FILTERS
         } else {
-            val filter = RowFilterFactory().getAndAggregatedTextFilters(queries)
+            val filter = RowFilterFactory().getAggregatedTextFilters(queries, aggregationType)
             historyTable.useFilter(filter)
             searchBar.text = "Searching for $filter"
         }

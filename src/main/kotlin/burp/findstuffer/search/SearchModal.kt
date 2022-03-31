@@ -1,13 +1,12 @@
 package burp.findstuffer.search
 
 import burp.findstuffer.FindStufferUI
+import burp.findstuffer.rowfilters.RowFilterAggregationType
 import java.awt.*
+import java.awt.event.ActionEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.ImageIcon
-import javax.swing.JButton
-import javax.swing.JDialog
-import javax.swing.JPanel
+import javax.swing.*
 
 
 class SearchModal(private val mainUI: FindStufferUI) :
@@ -18,6 +17,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
     private var searchFields = arrayListOf<TextQueryField>()
     private var searchFieldContainers = arrayListOf<Container>()
     private var queryCache = arrayListOf<TextQuery>()
+    private var aggregationType = RowFilterAggregationType.AND
 
     init {
         defaultCloseOperation = DISPOSE_ON_CLOSE
@@ -36,8 +36,25 @@ class SearchModal(private val mainUI: FindStufferUI) :
         )
         addSearchFieldButton.preferredSize = Dimension(100, 30)
         addSearchFieldButton.addActionListener { addSearchField(true) }
-        // search modal buttons panel
+
+
         val buttonsPanel = JPanel(FlowLayout(FlowLayout.RIGHT))
+        // radio buttons
+        val andRButton = JRadioButton("And")
+        andRButton.actionCommand = RowFilterAggregationType.AND.toString()
+        andRButton.isSelected = true
+        andRButton.addActionListener { radioButtonAction(it) }
+        val orRButton = JRadioButton("Or")
+        orRButton.actionCommand = RowFilterAggregationType.OR.toString()
+        orRButton.isSelected = false
+        orRButton.addActionListener { radioButtonAction(it) }
+        val radioButtonsGroup = ButtonGroup()
+        radioButtonsGroup.add(andRButton)
+        radioButtonsGroup.add(orRButton)
+        val radioButtonsPanel = JPanel(FlowLayout(FlowLayout.LEFT))
+        radioButtonsPanel.add(andRButton)
+        radioButtonsPanel.add(orRButton)
+        buttonsPanel.add(radioButtonsPanel)
         buttonsPanel.add(addSearchFieldButton)
         buttonsPanel.add(okButton)
         // search modal layout
@@ -56,8 +73,10 @@ class SearchModal(private val mainUI: FindStufferUI) :
                 }
             }
         })
+    }
 
-
+    private fun radioButtonAction(e : ActionEvent) {
+        aggregationType = RowFilterAggregationType.valueOf(e.actionCommand)
     }
 
     // TODO improve this kinda gross russian-doll-like BorderLayout Implementation with something cleaner if possible
@@ -79,9 +98,9 @@ class SearchModal(private val mainUI: FindStufferUI) :
 
     private fun submitOK() {
         // Deleting fields programmed for deletion
-        var i=0
-        while (i < searchFields.size){
-            if(searchFields[i].programmedForDeletion) removeSearchField(i)
+        var i = 0
+        while (i < searchFields.size) {
+            if (searchFields[i].programmedForDeletion) removeSearchField(i)
             else i++
         }
         // Caching queries for later use
@@ -89,7 +108,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
             searchFields.map { sf -> TextQuery(sf.query) }
         )
         // Executing search
-        mainUI.executeSearch(queryCache)
+        mainUI.executeSearch(queryCache, aggregationType)
         // Disappearing
         isVisible = false
     }
@@ -98,7 +117,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         isVisible = true
     }
 
-    fun programForDeletion(searchFieldInd: Int){
+    fun programForDeletion(searchFieldInd: Int) {
         val field = searchFields[searchFieldInd]
         field.programmedForDeletion = true
         searchFields[searchFieldInd].isVisible = false

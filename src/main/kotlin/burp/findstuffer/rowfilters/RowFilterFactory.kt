@@ -5,7 +5,7 @@ import burp.findstuffer.search.TextQueryScope
 
 class RowFilterFactory {
 
-    fun getTextFilter(textQuery: TextQuery) : IRowFilter {
+    private fun getTextFilter(textQuery: TextQuery) : IRowFilter {
         val filter =  when(textQuery.scope){
             TextQueryScope.REQUEST -> TextRequestFilter(textQuery.text)
             TextQueryScope.RESPONSE -> TextResponseFilter(textQuery.text)
@@ -16,10 +16,11 @@ class RowFilterFactory {
         else filter
     }
 
-    fun getAndAggregatedTextFilters(textQueries : Collection<TextQuery>) : IRowFilter {
-        return RowFilterAndAggregator(
-            textQueries.filterNot { it.isEmpty() }
-                .map { getTextFilter(it) }
-        )
+    fun getAggregatedTextFilters(textQueries: List<TextQuery>, aggregationType: RowFilterAggregationType): IRowFilter {
+        val individualFilters = textQueries.filterNot { it.isEmpty() }.map { getTextFilter(it) }
+        return when(aggregationType) {
+            RowFilterAggregationType.AND -> RowFilterAndAggregator(individualFilters)
+            RowFilterAggregationType.OR -> RowFilterOrAggregator(individualFilters)
+        }
     }
 }
