@@ -10,6 +10,7 @@ class BurpExtender : IBurpExtender {
     companion object {
         lateinit var callbacks: IBurpExtenderCallbacks
 
+        // This main function is here because it allows me to launch burp from my IDE and debug it
         @JvmStatic
         fun main(args: Array<String>) {
             println("ok")
