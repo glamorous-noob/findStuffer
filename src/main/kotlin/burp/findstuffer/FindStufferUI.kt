@@ -6,6 +6,8 @@ import burp.IHttpService
 import burp.IMessageEditorController
 import burp.ITab
 import burp.findstuffer.rowfilters.*
+import burp.findstuffer.search.SearchModal
+import burp.findstuffer.search.TextQuery
 import java.awt.*
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener

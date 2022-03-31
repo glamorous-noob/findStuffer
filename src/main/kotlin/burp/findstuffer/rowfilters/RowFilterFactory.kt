@@ -1,7 +1,7 @@
 package burp.findstuffer.rowfilters
 
-import burp.findstuffer.TextQuery
-import burp.findstuffer.TextQueryScope
+import burp.findstuffer.search.TextQuery
+import burp.findstuffer.search.TextQueryScope
 
 class RowFilterFactory {
 

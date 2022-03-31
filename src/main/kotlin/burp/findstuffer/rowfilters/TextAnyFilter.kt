@@ -1,7 +1,7 @@
 package burp.findstuffer.rowfilters
 
 import burp.findstuffer.HistoryRowData
-import burp.findstuffer.TextQueryScope
+import burp.findstuffer.search.TextQueryScope
 
 class TextAnyFilter(stringQuery : String)  : TextFilter(stringQuery) {
     override val scope = TextQueryScope.REQUEST_OR_RESPONSE

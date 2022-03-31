@@ -1,7 +1,7 @@
 package burp.findstuffer.rowfilters
 
 import burp.BurpExtender.Companion.callbacks
-import burp.findstuffer.TextQueryScope
+import burp.findstuffer.search.TextQueryScope
 
 open abstract class TextFilter(private val stringQuery : String) : IRowFilter {
     val byteQuery: ByteArray by lazy { callbacks.helpers.stringToBytes(stringQuery) }

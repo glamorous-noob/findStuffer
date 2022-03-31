@@ -1,11 +1,13 @@
 # FindStuffer
-FindStuffer, a Burp extension that finds stuff. 
+FindStuffer, a Burp extension to Find Stuff.
 ## Why FindStuffer
 When using Brup's built-in search modals in the Proxy or the Logger tabs, there are some limitations. This extension aims to overcome these limitations, with no intention to replace the original Burp search functionalities (because why would I work to do that ?)
 ## Demo & How to use
 TODO
 ## Installation
-At this moment, you need to compile this code to create a JAR and import manually from Extender → Extensions → Add. A JAR will be added soon to this project's releases page. I still haven't looked into add this to the BApp store.
+At this moment, you need to compile this code to create a JAR and import manually from Extender → Extensions → Add.
+
+A JAR will be added soon to this project's releases page. I still haven't looked into adding this to the BApp store.
 ## Use cases
 Some of the situations that led me to coding this. These happened in projects containing 10k-20k+ requests.
 ### Use case 1
@@ -29,17 +31,16 @@ I am working on a project including many domains, and I want to apply a text que
 If you like the extension and the potential it has to be practical tool you use often, you are very welcome to contribute to this repo by submitting a PR. You can also open issues if you encounter bugs or have interesting feature ideas.
 
 But before doing that, please read this section carefully to get an idea of what's planned / what's already being currently worked on.
-
 ### Known issues
-None so far. We rock (or we are ignorant of our own demise.)
+The search modal always pops up on the top left corner of the screen. I don't know how to center it properly. Halp plis.
 ### Implemented Features
 - Choosing the scope of a text query: request, response, both or any.
 - Chaining text queries (aggregation using boolean AND logic), similar to piping grep commands together on UNIX.
-### On the roadmap
+### Current issues
 This section is about features that are currently being developed / officially on the roadmap:
 - [ ]  Implement "negative queries" per text field
 - [ ]  Allow the aggregation of queries using boolean OR logic instead of a boolean AND
-- [ ]  Impelement the ability to delete a text field. The only way of deleting unused text fields is by unloading and reloading the extension.
+- [x]  Implement the ability to delete a text field. The only way of deleting unused text fields is by unloading and reloading the extension.
 ### Dev Ideas
 This section is about features that I recognize as potentially useful and intend to work on some time, without them being a priority. Some of these features can be replaced by celver use of the basic features already implemented. Some do add a lot of value but will need a serious amount of work.
 #### Listeners

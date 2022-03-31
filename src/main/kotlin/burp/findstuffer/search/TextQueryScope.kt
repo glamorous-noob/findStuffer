@@ -1,4 +1,4 @@
-package burp.findstuffer
+package burp.findstuffer.search
 
 enum class TextQueryScope {
     REQUEST, RESPONSE, REQUEST_OR_RESPONSE, REQUEST_AND_RESPONSE;
