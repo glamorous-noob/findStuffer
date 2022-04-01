@@ -8,7 +8,7 @@ open abstract class TextFilter(private val stringQuery : String) : IRowFilter {
     abstract val scope : TextQueryScope
 
     fun queryInData(query : ByteArray, data : ByteArray) : Boolean {
-        return callbacks.helpers.indexOf(data, query, false, 0, data.size - 1) != -1
+        return callbacks.helpers.indexOf(data, query, false, 0, data.size) != -1
     }
 
     override fun toString(): String {
