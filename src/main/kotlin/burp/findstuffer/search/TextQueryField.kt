@@ -2,7 +2,6 @@ package burp.findstuffer.search
 
 import burp.findstuffer.search.TextQueryScope.Companion.SCOPES
 import java.awt.*
-import java.awt.event.ItemListener
 import javax.swing.*
 
 class TextQueryField(removable: Boolean, searchModal: SearchModal, private val id: Int) : JPanel() {
@@ -11,7 +10,7 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
     private val label = JLabel("Text query : ")
     private val scopeChooser = JComboBox(SCOPES)
     val notCheckbox = JCheckBox("Inverted")
-    private val negativeQuery : Boolean
+    private val negativeQuery: Boolean
         get() = notCheckbox.isSelected
 
     // TODO is using a computed member here a good idea performance-wise ? It's certainly an easy idea
