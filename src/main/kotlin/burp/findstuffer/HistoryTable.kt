@@ -67,10 +67,11 @@ class HistoryTable (
     }
 
     override fun changeSelection(row: Int, col: Int, toggle: Boolean, extend: Boolean) {
+        val newlySelectedRow = tableModel.filteredSortedRows[row]
         // update the "#" number
-        selectedRowNumber = tableModel.filteredSortedRows[row].number
+        selectedRowNumber = newlySelectedRow.number
         // Tell the main UI the selection changed
-        mainUI.tableSelectionChanged(tableModel.filteredSortedRows[row].data)
+        mainUI.tableSelectionChanged(newlySelectedRow.request, newlySelectedRow.response)
         super.changeSelection(row, col, toggle, extend)
     }
 
@@ -91,7 +92,7 @@ class HistoryTable (
             //if the selected row number does not correspond to any existing row, that means I f***** up somewhere
             // Let's just return null silently and hope for the best. What's the worst that could happen, right? :)
             val index = tableModel.rowNumberToIndex(it) ?: return null
-            return tableModel.filteredSortedRows[index].data.httpService
+            return tableModel.filteredSortedRows[index].httpService
         }
         return null
     }

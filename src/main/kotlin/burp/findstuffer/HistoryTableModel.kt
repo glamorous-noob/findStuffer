@@ -19,14 +19,35 @@ class HistoryTableModel : AbstractTableModel() {
     // This solution was used instead of a map because it makes it easier to deal with JTable's column indexes
     private val columns = arrayOf(
         // This "#" will not correspond to the one in the proxy history tab if at least one line has been deleted
-        FindStufferColumn("#" ,  { row -> row.number }, compareBy { it.number } ),
-        FindStufferColumn("Protocol" ,  { row -> row.protocol }, compareBy<HistoryRowData> { it.protocol }.thenBy { it.number }),
-        FindStufferColumn("Host" , { row -> row.url.host }, compareBy<HistoryRowData> { it.url.host}.thenBy { it.number }),
-        FindStufferColumn("URL Path" , { row -> row.url.path }, compareBy<HistoryRowData> { it.url.path}.thenBy { it.number }),
-        FindStufferColumn("Method" , { row -> row.method }, compareBy<HistoryRowData> { it.method}.thenBy { it.number }),
-        FindStufferColumn("Status" , { row -> row.statusCode ?: "" }, compareBy<HistoryRowData> { it.statusCode}.thenBy { it.number }),
-        FindStufferColumn("Response Length" , { row -> row.responseLength ?: "" }, compareBy<HistoryRowData> { it.responseLength}.thenBy { it.number }),
-        FindStufferColumn("MIME Type" , { row -> row.mimeType ?: ""  }, compareBy<HistoryRowData> { it.mimeType}.thenBy { it.number })
+        FindStufferColumn("#", { row -> row.number }, compareBy { it.number }),
+        FindStufferColumn(
+            "Protocol",
+            { row -> row.httpService.protocol },
+            compareBy<HistoryRowData> { it.httpService.protocol }.thenBy { it.number }),
+        FindStufferColumn(
+            "Host",
+            { row -> row.url.host },
+            compareBy<HistoryRowData> { it.url.host }.thenBy { it.number }),
+        FindStufferColumn(
+            "URL Path",
+            { row -> row.url.path },
+            compareBy<HistoryRowData> { it.url.path }.thenBy { it.number }),
+        FindStufferColumn(
+            "Method",
+            { row -> row.method },
+            compareBy<HistoryRowData> { it.method }.thenBy { it.number }),
+        FindStufferColumn(
+            "Status",
+            { row -> row.statusCode ?: "" },
+            compareBy<HistoryRowData> { it.statusCode }.thenBy { it.number }),
+        FindStufferColumn(
+            "Response Length",
+            { row -> if(row.response.isNotEmpty()) row.response.size else "" },
+            compareBy<HistoryRowData> { it.response.size }.thenBy { it.number }),
+        FindStufferColumn(
+            "MIME Type",
+            { row -> row.mimeType ?: "" },
+            compareBy<HistoryRowData> { it.mimeType }.thenBy { it.number })
     )
 
     // The non-sorted non-filtered version, the underlying list

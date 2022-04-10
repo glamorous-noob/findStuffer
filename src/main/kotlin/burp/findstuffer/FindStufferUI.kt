@@ -120,9 +120,6 @@ class FindStufferUI : ITab, IMessageEditorController {
      *
      * @param data
      */
-    fun tableSelectionChanged(data: IHttpRequestResponse) {
-        requestViewer.setMessage(data.request, true)
-        responseViewer.setMessage(data.response, false)
     }
 
     //TODO add more stuff here if needed
