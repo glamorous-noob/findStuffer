@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel
  *
  * @constructor Create empty Find stuffer table model
  */
-//TODO I've implemented way too much functionality that seems to be already present in Java Swing's librairies
+//TODO I've implemented way too much functionality that seems to be already present in Java Swing's libraries
 // This code should be simplified by using said functionality (sorting - filtering - etc.)
 // In my defense, I did this because the native table filtering was really sucky, laggy and buggy
 class HistoryTableModel : AbstractTableModel() {
@@ -51,24 +51,27 @@ class HistoryTableModel : AbstractTableModel() {
     )
 
     // The non-sorted non-filtered version, the underlying list
-    var allRows : List<HistoryRowData> = arrayListOf()
+    var allRows: List<HistoryRowData> = arrayListOf()
+
     // Used to interface with the table UI through the overridden methods
     // Must contain shallow copies only to the objects in allRows -- no object creation
-    var filteredSortedRows : MutableList<HistoryRowData> = arrayListOf()
+    var filteredSortedRows: MutableList<HistoryRowData> = arrayListOf()
+
     // Maps the displayed "#" number to the actual row index. Used to maintain selected row after sorting
-    private var rowNumberToIndexMap : MutableMap<Int, Int> = hashMapOf()
-    private var sortColumn : Int? = null
+    private var rowNumberToIndexMap: MutableMap<Int, Int> = hashMapOf()
+    private var sortColumn: Int? = null
+
     //TODO allow for the application of more than one filter at a time either by making this a list or by
     // creating an IFindStufferRowFilter that aggregates many of them
-    private var appliedFilter : IRowFilter? = null
+    private var appliedFilter: IRowFilter? = null
 
     /**
      *
      *
      * @param data the array of proxy history items as returned by callbacks.proxyHistory
      */
-    fun initContent(data : Array<IHttpRequestResponse>){
-        allRows = data.mapIndexed { index, element -> HistoryRowData(index+1, element) }
+    fun initContent(data: Array<IHttpRequestResponse>) {
+        allRows = data.mapIndexed { index, element -> HistoryRowData(index + 1, element) }
         filteredSortedRows = allRows.toMutableList()
         rowNumberToIndexMap = hashMapOf()
         updateSortedIndexes()
@@ -80,7 +83,7 @@ class HistoryTableModel : AbstractTableModel() {
      * @param number The number displayed for the row in the "#" column, which never changes
      * @return the actual index of the row, which changes when the rows are sorted
      */
-    fun rowNumberToIndex(number: Int) : Int? {
+    fun rowNumberToIndex(number: Int): Int? {
         return rowNumberToIndexMap[number]
     }
 
@@ -96,7 +99,7 @@ class HistoryTableModel : AbstractTableModel() {
      * @param data the array returned by callbacks.proxyHistory
      */
     fun resetContent(data: Array<IHttpRequestResponse>) {
-        allRows = data.mapIndexed { index, element -> HistoryRowData(index+1, element) }
+        allRows = data.mapIndexed { index, element -> HistoryRowData(index + 1, element) }
         appliedFilter?.let {
             useNewFilters(it) // reapply current filter if not null, sorting is included in useNewFilter
         } ?: run {
@@ -116,17 +119,17 @@ class HistoryTableModel : AbstractTableModel() {
     }
 
     //TODO maybe rename this to sort() and make it an override of the other existing sort method ?
-    private fun reapplyCurrentSorting(){
+    private fun reapplyCurrentSorting() {
         sortColumn?.let {
-            doSorting(it, columns[it].sortState== SortStateEnum.DESCENDING)
+            doSorting(it, columns[it].sortState == SortStateEnum.DESCENDING)
         }
     }
 
     private fun doSorting(column: Int, reverse: Boolean) {
         filteredSortedRows.sortWith(getColumnComparator(column))
-        if(reverse) filteredSortedRows.reverse()
+        if (reverse) filteredSortedRows.reverse()
         columns.forEach { it.sortState = SortStateEnum.NONE }
-        columns[column].sortState = if(reverse) SortStateEnum.DESCENDING else SortStateEnum.ASCENDING
+        columns[column].sortState = if (reverse) SortStateEnum.DESCENDING else SortStateEnum.ASCENDING
     }
 
     /**
@@ -135,10 +138,10 @@ class HistoryTableModel : AbstractTableModel() {
      * @param column the column's index on which the sorting is done
      * @return The new temporary title of the column, to be applied by the table
      */
-    fun sort(column: Int) : String {
+    fun sort(column: Int): String {
         sortColumn = column
         // If the rows are already sorted in ascending order, we should do descending order (reverse=true)
-        val reverse = columns[column].sortState== SortStateEnum.ASCENDING
+        val reverse = columns[column].sortState == SortStateEnum.ASCENDING
         doSorting(column, reverse)
         updateSortedIndexes()
         fireTableDataChanged()
@@ -146,11 +149,11 @@ class HistoryTableModel : AbstractTableModel() {
     }
 
     override fun getColumnName(column: Int): String {
-        if(column >= 0 && column < columns.size) return columns[column].name
+        if (column >= 0 && column < columns.size) return columns[column].name
         return ""
     }
 
-    private fun getColumnComparator(column : Int) : Comparator<HistoryRowData> {
+    private fun getColumnComparator(column: Int): Comparator<HistoryRowData> {
         return columns[column].comparator
     }
 
@@ -171,7 +174,7 @@ class HistoryTableModel : AbstractTableModel() {
     //TODO improve this. Or create a useAdditionalFilter function ?
     //TODO is it really the best choice to systematically couple filtering with sorting here ?
     fun useNewFilters(filter: IRowFilter) {
-        filteredSortedRows = allRows.filter { row  -> filter.rowMeetsCriteria(row) }.toMutableList()
+        filteredSortedRows = allRows.filter { row -> filter.rowMeetsCriteria(row) }.toMutableList()
         appliedFilter = filter
         reapplyCurrentSorting()
         updateSortedIndexes()
@@ -186,8 +189,12 @@ class HistoryTableModel : AbstractTableModel() {
         fireTableDataChanged()
     }
 
-    private class FindStufferColumn(val name : String, val cellDisplayedValGetter : Function<HistoryRowData, Any>, val comparator: Comparator<HistoryRowData>){
-        var sortState : SortStateEnum = SortStateEnum.NONE
+    private class FindStufferColumn(
+        val name: String,
+        val cellDisplayedValGetter: Function<HistoryRowData, Any>,
+        val comparator: Comparator<HistoryRowData>
+    ) {
+        var sortState: SortStateEnum = SortStateEnum.NONE
     }
 
 }

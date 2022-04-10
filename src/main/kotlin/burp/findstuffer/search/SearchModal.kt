@@ -79,7 +79,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         })
     }
 
-    private fun radioButtonAction(e : ActionEvent) {
+    private fun radioButtonAction(e: ActionEvent) {
         aggregationType = RowFilterAggregationType.valueOf(e.actionCommand)
     }
 
@@ -96,7 +96,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         val newContainer = JPanel(BorderLayout())
         container.add(newContainer, BorderLayout.CENTER)
         container.revalidate()
-        container.repaint();
+        container.repaint()
         searchFieldContainers.add(newContainer)
     }
 
@@ -138,7 +138,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         previousContainer.remove(correspondingContainer)
         previousContainer.add(followingContainer, BorderLayout.CENTER)
         previousContainer.revalidate()
-        previousContainer.repaint();
+        previousContainer.repaint()
         searchFields.removeAt(searchFieldInd)
         searchFieldContainers.removeAt(searchFieldInd)
     }

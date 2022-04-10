@@ -2,10 +2,10 @@ package burp.findstuffer.rowfilters
 
 import burp.findstuffer.HistoryRowData
 
-class RowFilterOrAggregator(private val filters : Collection<IRowFilter>) : IRowFilter {
+class RowFilterOrAggregator(private val filters: Collection<IRowFilter>) : IRowFilter {
 
     override fun rowMeetsCriteria(row: HistoryRowData): Boolean {
-        return filters.any{
+        return filters.any {
             it.rowMeetsCriteria(row)
         }
     }

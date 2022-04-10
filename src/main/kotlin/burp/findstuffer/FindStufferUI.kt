@@ -120,6 +120,9 @@ class FindStufferUI : ITab, IMessageEditorController {
      *
      * @param data
      */
+    fun tableSelectionChanged(request: ByteArray, response: ByteArray) {
+        requestViewer.setMessage(request, true)
+        responseViewer.setMessage(response, false)
     }
 
     //TODO add more stuff here if needed
@@ -153,7 +156,6 @@ class FindStufferUI : ITab, IMessageEditorController {
         return responseViewer.message
     }
 
-    //TODO !!!
     fun executeSearch(queries: List<TextQuery>, aggregationType: RowFilterAggregationType) {
         if (queries.all { it.isEmpty() }) {
             historyTable.clearFilters()
