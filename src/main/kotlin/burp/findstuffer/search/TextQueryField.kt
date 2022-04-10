@@ -27,17 +27,15 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
             BorderFactory.createLineBorder(Color.GRAY),
             BorderFactory.createEmptyBorder(4, 3, 0, 0)
         )
-        scopeChooser.selectedIndex = SCOPES.indexOf(TextQueryScope.REQUEST_OR_RESPONSE)
         add(label, BorderLayout.LINE_START)
         add(textField, BorderLayout.CENTER)
         val optionsPanel = JPanel(FlowLayout(FlowLayout.LEFT, 2, 0))
         optionsPanel.add(scopeChooser)
-        caseCheckbox.isSelected = false
         optionsPanel.add(caseCheckbox)
-        notCheckbox.isSelected = false
         optionsPanel.add(notCheckbox)
         if (removable) optionsPanel.add(createDeleteButton(searchModal))
         add(optionsPanel, BorderLayout.LINE_END)
+        initValues()
     }
 
 
@@ -59,6 +57,13 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
         scopeChooser.selectedIndex = SCOPES.indexOf(cache.scope)
         notCheckbox.isSelected = cache.negativeQuery
         caseCheckbox.isSelected = cache.caseSensitiveQuery
+    }
+
+    fun initValues() {
+        textField.text = ""
+        scopeChooser.selectedIndex = SCOPES.indexOf(TextQueryScope.REQUEST_OR_RESPONSE)
+        notCheckbox.isSelected = false
+        caseCheckbox.isSelected = false
     }
 
 }
