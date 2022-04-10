@@ -25,7 +25,10 @@ class SearchModal(private val mainUI: FindStufferUI) :
         // OK button
         val okButton = JButton("OK")
         okButton.preferredSize = Dimension(100, 30)
-        okButton.addActionListener { submitOK() }
+        okButton.addActionListener { submitSearch(false) }
+        val applyButton = JButton("Apply")
+        applyButton.preferredSize = Dimension(100, 30)
+        applyButton.addActionListener { submitSearch(true) }
         // Add search field button
         val addSearchFieldButton = JButton(
             ImageIcon(
@@ -56,6 +59,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         radioButtonsPanel.add(orRButton)
         buttonsPanel.add(radioButtonsPanel)
         buttonsPanel.add(addSearchFieldButton)
+        buttonsPanel.add(applyButton)
         buttonsPanel.add(okButton)
         // search modal layout
         layout = BorderLayout()
@@ -96,7 +100,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         searchFieldContainers.add(newContainer)
     }
 
-    private fun submitOK() {
+    private fun submitSearch(visible: Boolean) {
         // Deleting fields programmed for deletion
         var i = 0
         while (i < searchFields.size) {
@@ -110,7 +114,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         // Executing search
         mainUI.executeSearch(queryCache, aggregationType)
         // Disappearing
-        isVisible = false
+        isVisible = visible
     }
 
     fun display() {
