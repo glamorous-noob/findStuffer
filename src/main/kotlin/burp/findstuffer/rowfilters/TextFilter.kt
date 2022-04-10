@@ -12,6 +12,7 @@ open abstract class TextFilter(private val stringQuery: String, private val case
     }
 
     override fun toString(): String {
-        return "${scope.toString().uppercase()}→$stringQuery"
+        val cs = if (caseSensitive) "(cs:)" else ""
+        return "${scope.toString().uppercase()}$cs→$stringQuery"
     }
 }
