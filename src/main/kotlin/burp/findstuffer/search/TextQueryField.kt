@@ -4,7 +4,7 @@ import burp.findstuffer.search.TextQueryScope.Companion.SCOPES
 import java.awt.*
 import javax.swing.*
 
-class TextQueryField(removable: Boolean, searchModal: SearchModal, private val id: Int) : JPanel() {
+class TextQueryField(removable: Boolean, searchDialog: SearchDialog, private val id: Int) : JPanel() {
     var programmedForDeletion = false
     private val textField = JTextField()
     private val label = JLabel("Text query : ")
@@ -33,22 +33,22 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
         optionsPanel.add(scopeChooser)
         optionsPanel.add(caseCheckbox)
         optionsPanel.add(notCheckbox)
-        if (removable) optionsPanel.add(createDeleteButton(searchModal))
+        if (removable) optionsPanel.add(createDeleteButton(searchDialog))
         add(optionsPanel, BorderLayout.LINE_END)
         initValues()
     }
 
 
-    private fun createDeleteButton(searchModal: SearchModal): Component {
+    private fun createDeleteButton(searchDialog: SearchDialog): Component {
         val deleteFieldButton = JButton(
             ImageIcon(
                 ImageIcon(
-                    SearchModal::class.java.classLoader.getResource("deleteField.png")
+                    SearchDialog::class.java.classLoader.getResource("deleteField.png")
                 ).image.getScaledInstance(10, 10, Image.SCALE_SMOOTH)
             )
         )
         deleteFieldButton.preferredSize = Dimension(20, 20)
-        deleteFieldButton.addActionListener { searchModal.programForDeletion(id) }
+        deleteFieldButton.addActionListener { searchDialog.programForDeletion(id) }
         return deleteFieldButton
     }
 

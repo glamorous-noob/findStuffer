@@ -7,7 +7,7 @@ import burp.IMessageEditorController
 import burp.ITab
 import burp.findstuffer.rowfilters.RowFilterAggregationType
 import burp.findstuffer.rowfilters.RowFilterFactory
-import burp.findstuffer.search.SearchModal
+import burp.findstuffer.search.SearchDialog
 import burp.findstuffer.search.TextQuery
 import java.awt.BorderLayout
 import java.awt.Color
@@ -49,7 +49,7 @@ class FindStufferUI : ITab, IMessageEditorController {
     private val responseViewer = callbacks.createMessageEditor(this, false)
 
     // Search modal
-    private val searchModal = SearchModal(this)
+    private val searchDialog = SearchDialog(this)
 
     // init components
     init {
@@ -87,7 +87,7 @@ class FindStufferUI : ITab, IMessageEditorController {
         callbacks.customizeUiComponent(historyTable)
         callbacks.customizeUiComponent(historyScrollPane)
         callbacks.customizeUiComponent(requestAndResponseEditors)
-        callbacks.customizeUiComponent(searchModal)
+        callbacks.customizeUiComponent(searchDialog)
         //TODO add the rest of the components
 
         // setup listeners on ui elements
@@ -97,7 +97,7 @@ class FindStufferUI : ITab, IMessageEditorController {
         }
         searchBar.addMouseListener(object : MouseListener {
             override fun mouseClicked(e: MouseEvent?) {
-                searchModal.display()
+                searchDialog.display()
             }
 
             override fun mousePressed(e: MouseEvent?) {}

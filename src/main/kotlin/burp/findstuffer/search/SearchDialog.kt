@@ -9,8 +9,8 @@ import java.awt.event.WindowEvent
 import javax.swing.*
 
 
-class SearchModal(private val mainUI: FindStufferUI) :
-    JDialog(null, "Let's find stuff", ModalityType.APPLICATION_MODAL) {
+class SearchDialog(private val mainUI: FindStufferUI) :
+    JDialog() {
     // searchFields[i] is the field in the PAGE_START of searchFieldContainers[i]
     // The last element of searchFieldContainers is the one anticipating the creation of a new searchField
     // That's why the containers list will have one more element than the search fields list
@@ -20,6 +20,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
     private var aggregationType = RowFilterAggregationType.AND
 
     init {
+        title = "FindStuffin'"
         defaultCloseOperation = DISPOSE_ON_CLOSE
         size = Dimension(800, 300)
         // Buttons
@@ -36,7 +37,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
         val addSearchFieldButton = JButton(
             ImageIcon(
                 ImageIcon(
-                    SearchModal::class.java.classLoader.getResource("addButtonIcon.png")
+                    SearchDialog::class.java.classLoader.getResource("addButtonIcon.png")
                 ).image.getScaledInstance(20, 20, Image.SCALE_SMOOTH)
             )
         )
