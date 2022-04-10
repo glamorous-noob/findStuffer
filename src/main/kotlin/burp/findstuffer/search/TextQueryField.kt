@@ -9,13 +9,16 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
     private val textField = JTextField()
     private val label = JLabel("Text query : ")
     private val scopeChooser = JComboBox(SCOPES)
-    val notCheckbox = JCheckBox("Inverted")
+    private val notCheckbox = JCheckBox("Inverted")
     private val negativeQuery: Boolean
         get() = notCheckbox.isSelected
+    private val caseCheckbox = JCheckBox("Case-sensitive")
+    private val caseSensitiveQuery: Boolean
+        get() = caseCheckbox.isSelected
 
     // TODO is using a computed member here a good idea performance-wise ? It's certainly an easy idea
     val query: TextQuery
-        get() = TextQuery(textField.text, SCOPES[scopeChooser.selectedIndex], negativeQuery)
+        get() = TextQuery(textField.text, SCOPES[scopeChooser.selectedIndex], negativeQuery, caseSensitiveQuery)
 
     init {
         border = BorderFactory.createEmptyBorder(4, 4, 4, 4)
@@ -29,6 +32,8 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
         add(textField, BorderLayout.CENTER)
         val optionsPanel = JPanel(FlowLayout(FlowLayout.LEFT, 2, 0))
         optionsPanel.add(scopeChooser)
+        caseCheckbox.isSelected = false
+        optionsPanel.add(caseCheckbox)
         notCheckbox.isSelected = false
         optionsPanel.add(notCheckbox)
         if (removable) optionsPanel.add(createDeleteButton(searchModal))
@@ -53,6 +58,7 @@ class TextQueryField(removable: Boolean, searchModal: SearchModal, private val i
         textField.text = cache.text
         scopeChooser.selectedIndex = SCOPES.indexOf(cache.scope)
         notCheckbox.isSelected = cache.negativeQuery
+        caseCheckbox.isSelected = cache.caseSensitiveQuery
     }
 
 }

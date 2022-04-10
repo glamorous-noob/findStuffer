@@ -3,7 +3,7 @@ package burp.findstuffer.rowfilters
 import burp.findstuffer.HistoryRowData
 import burp.findstuffer.search.TextQueryScope
 
-class TextBothFilter(stringQuery: String) : TextFilter(stringQuery) {
+class TextBothFilter(stringQuery: String, caseSensitive: Boolean) : TextFilter(stringQuery, caseSensitive) {
     override val scope = TextQueryScope.REQUEST_AND_RESPONSE
 
     override fun rowMeetsCriteria(row: HistoryRowData): Boolean {

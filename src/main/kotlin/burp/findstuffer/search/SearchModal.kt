@@ -21,7 +21,7 @@ class SearchModal(private val mainUI: FindStufferUI) :
 
     init {
         defaultCloseOperation = DISPOSE_ON_CLOSE
-        size = Dimension(500, 300)
+        size = Dimension(800, 300)
         // OK button
         val okButton = JButton("OK")
         okButton.preferredSize = Dimension(100, 30)
