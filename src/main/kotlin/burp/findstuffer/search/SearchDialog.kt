@@ -9,8 +9,8 @@ import java.awt.event.WindowEvent
 import javax.swing.*
 
 
-class SearchModal(private val mainUI: FindStufferUI) :
-    JDialog(null, "Let's find stuff", ModalityType.APPLICATION_MODAL) {
+class SearchDialog(private val mainUI: FindStufferUI) :
+    JDialog() {
     // searchFields[i] is the field in the PAGE_START of searchFieldContainers[i]
     // The last element of searchFieldContainers is the one anticipating the creation of a new searchField
     // That's why the containers list will have one more element than the search fields list
@@ -20,17 +20,24 @@ class SearchModal(private val mainUI: FindStufferUI) :
     private var aggregationType = RowFilterAggregationType.AND
 
     init {
+        title = "FindStuffin'"
         defaultCloseOperation = DISPOSE_ON_CLOSE
-        size = Dimension(500, 300)
-        // OK button
+        size = Dimension(800, 300)
+        // Buttons
         val okButton = JButton("OK")
         okButton.preferredSize = Dimension(100, 30)
-        okButton.addActionListener { submitOK() }
+        okButton.addActionListener { submitSearch(false) }
+        val applyButton = JButton("Apply")
+        applyButton.preferredSize = Dimension(100, 30)
+        applyButton.addActionListener { submitSearch(true) }
+        val clearSearchButton = JButton("Clear")
+        clearSearchButton.preferredSize = Dimension(100, 30)
+        clearSearchButton.addActionListener { clearSearchFields() }
         // Add search field button
         val addSearchFieldButton = JButton(
             ImageIcon(
                 ImageIcon(
-                    SearchModal::class.java.classLoader.getResource("addButtonIcon.png")
+                    SearchDialog::class.java.classLoader.getResource("addButtonIcon.png")
                 ).image.getScaledInstance(20, 20, Image.SCALE_SMOOTH)
             )
         )
@@ -55,7 +62,9 @@ class SearchModal(private val mainUI: FindStufferUI) :
         radioButtonsPanel.add(andRButton)
         radioButtonsPanel.add(orRButton)
         buttonsPanel.add(radioButtonsPanel)
+        buttonsPanel.add(clearSearchButton)
         buttonsPanel.add(addSearchFieldButton)
+        buttonsPanel.add(applyButton)
         buttonsPanel.add(okButton)
         // search modal layout
         layout = BorderLayout()
@@ -75,11 +84,11 @@ class SearchModal(private val mainUI: FindStufferUI) :
         })
     }
 
-    private fun radioButtonAction(e : ActionEvent) {
+    private fun radioButtonAction(e: ActionEvent) {
         aggregationType = RowFilterAggregationType.valueOf(e.actionCommand)
     }
 
-    // TODO improve this kinda gross russian-doll-like BorderLayout Implementation with something cleaner if possible
+    // TODO improve this kinda gross russian-doll-like BorderLayout implementation with something cleaner if possible
     private fun addSearchField(removable: Boolean) {
         val containerInd = searchFieldContainers.size - 1
         val container = searchFieldContainers[containerInd]
@@ -92,11 +101,11 @@ class SearchModal(private val mainUI: FindStufferUI) :
         val newContainer = JPanel(BorderLayout())
         container.add(newContainer, BorderLayout.CENTER)
         container.revalidate()
-        container.repaint();
+        container.repaint()
         searchFieldContainers.add(newContainer)
     }
 
-    private fun submitOK() {
+    private fun submitSearch(visible: Boolean) {
         // Deleting fields programmed for deletion
         var i = 0
         while (i < searchFields.size) {
@@ -107,10 +116,10 @@ class SearchModal(private val mainUI: FindStufferUI) :
         queryCache = ArrayList(
             searchFields.map { sf -> TextQuery(sf.query) }
         )
-        // Executing search
+        // Executing search with cached queries
         mainUI.executeSearch(queryCache, aggregationType)
         // Disappearing
-        isVisible = false
+        isVisible = visible
     }
 
     fun display() {
@@ -118,12 +127,14 @@ class SearchModal(private val mainUI: FindStufferUI) :
     }
 
     fun programForDeletion(searchFieldInd: Int) {
+        if (searchFieldInd < 1) return
         val field = searchFields[searchFieldInd]
         field.programmedForDeletion = true
         searchFields[searchFieldInd].isVisible = false
     }
 
     private fun removeSearchField(searchFieldInd: Int) {
+        if (searchFieldInd < 1) return
         val correspondingContainer = searchFieldContainers[searchFieldInd]
         // There is always a previous container (container 0 is the search modal itself), because searchFieldInd > 0
         val previousContainer = searchFieldContainers[searchFieldInd - 1]
@@ -134,9 +145,15 @@ class SearchModal(private val mainUI: FindStufferUI) :
         previousContainer.remove(correspondingContainer)
         previousContainer.add(followingContainer, BorderLayout.CENTER)
         previousContainer.revalidate()
-        previousContainer.repaint();
+        previousContainer.repaint()
         searchFields.removeAt(searchFieldInd)
         searchFieldContainers.removeAt(searchFieldInd)
     }
+
+    private fun clearSearchFields() {
+        for (i in searchFields.size - 1 downTo 1) programForDeletion(i)
+        searchFields[0].initValues()
+    }
+
 
 }

@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities
 @SuppressWarnings("unused") // Remove warning, the class will be used by burp
 class BurpExtender : IBurpExtender {
     private lateinit var ui: FindStufferUI
+
     companion object {
         lateinit var callbacks: IBurpExtenderCallbacks
 
@@ -17,7 +18,6 @@ class BurpExtender : IBurpExtender {
             StartBurp.main(*args)
         }
     }
-
 
 
     override fun registerExtenderCallbacks(callbacks: IBurpExtenderCallbacks) {

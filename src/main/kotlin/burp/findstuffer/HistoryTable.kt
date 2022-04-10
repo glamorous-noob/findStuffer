@@ -14,15 +14,15 @@ import javax.swing.JTable
  * @property mainUI
  * @constructor Create empty Find stuffer history table
  */
-class HistoryTable (
+class HistoryTable(
     private val tableModel: HistoryTableModel,
     private val mainUI: FindStufferUI
 ) : JTable(tableModel) {
     // represents the selected "#" number
-    private var selectedRowNumber : Int? = null
+    private var selectedRowNumber: Int? = null
 
     init {
-        tableHeader.addMouseListener(object : MouseAdapter(){
+        tableHeader.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
                 sortRowsByColumn(columnAtPoint(e.point))
             }
@@ -31,7 +31,7 @@ class HistoryTable (
 
     private fun sortRowsByColumn(column: Int) {
         // Reset column names to default
-        for (i in 0 until tableModel.columnCount){
+        for (i in 0 until tableModel.columnCount) {
             tableHeader.columnModel.getColumn(i).headerValue = tableModel.getColumnName(i)
         }
         // Sorting and setting new column name
@@ -41,20 +41,23 @@ class HistoryTable (
         applyRowSelection()
     }
 
-    private fun applyRowSelection(){
+    /**
+     * Updates the UI to select currently selected row if possible, to be used after filtering or sorting modifications
+     */
+    private fun applyRowSelection() {
         selectedRowNumber?.let {
             val selectedRowIndex = tableModel.rowNumberToIndex(it)
-            if(selectedRowIndex==null){
+            if (selectedRowIndex == null) {
                 selectedRowNumber = null
                 clearSelection()
                 mainUI.tableSelectionCleared()
                 repaint()
                 return
-            } else{
+            } else {
                 setRowSelectionInterval(selectedRowIndex, selectedRowIndex)
             }
+            repaint()
         }
-        repaint()
     }
 
     /**
@@ -67,10 +70,11 @@ class HistoryTable (
     }
 
     override fun changeSelection(row: Int, col: Int, toggle: Boolean, extend: Boolean) {
+        val newlySelectedRow = tableModel.filteredSortedRows[row]
         // update the "#" number
-        selectedRowNumber = tableModel.filteredSortedRows[row].number
+        selectedRowNumber = newlySelectedRow.number
         // Tell the main UI the selection changed
-        mainUI.tableSelectionChanged(tableModel.filteredSortedRows[row].data)
+        mainUI.tableSelectionChanged(newlySelectedRow.request, newlySelectedRow.response)
         super.changeSelection(row, col, toggle, extend)
     }
 
@@ -80,7 +84,7 @@ class HistoryTable (
      * @param dataItems
      */
     fun resetContent(dataItems: Array<IHttpRequestResponse>) {
-        selectedRowNumber=null
+        selectedRowNumber = null
         clearSelection()
         tableModel.resetContent(dataItems)
         repaint()
@@ -91,7 +95,7 @@ class HistoryTable (
             //if the selected row number does not correspond to any existing row, that means I f***** up somewhere
             // Let's just return null silently and hope for the best. What's the worst that could happen, right? :)
             val index = tableModel.rowNumberToIndex(it) ?: return null
-            return tableModel.filteredSortedRows[index].data.httpService
+            return tableModel.filteredSortedRows[index].httpService
         }
         return null
     }

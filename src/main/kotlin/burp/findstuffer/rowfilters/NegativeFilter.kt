@@ -8,7 +8,7 @@ class NegativeFilter(private val filter: TextFilter) : IRowFilter {
     }
 
     override fun toString(): String {
-        return "¬(${filter.toString()})"
+        return "¬($filter)"
     }
 
 }

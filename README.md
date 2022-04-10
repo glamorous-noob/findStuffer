@@ -1,14 +1,18 @@
 # FindStuffer
-FindStuffer, a Burp extension to Find Stuff. It aims to overcome some of the search limitations in Burp's native Proxy HTTP History tab (even in the Pro version.) 
+FindStuffer, a Burp extension to find stuff, both for Community and Pro versions.
 
-You can use FindStuffer to aggregate as many text queries as needed in one search, and to control the scope of each query.  You can dynamically add as many text queries as needed. Each query can be individually inverted. Each query is applied on the headers and body of its scope.
+You can use FindStuffer to aggregate as many text queries as needed in one search. You can dynamically add as many text queries as needed (in theory). Each query can be individually :
+- Inverted
+- Applied to a specific scope (request, response, both at the same time, or any)
+- Configured to be case-sensitive or case-insensitive
 
-Check out the tutorial for a more practical and complete example.
+Query aggregation can be and-based or or-based. 
 
 ![short demo](images/search_demo_short.gif)
 
+Check out the tutorial for a detailed example.
 ## Tutorial / Demo
-In this section I will give an example of how to use FindStuffer v0.1.
+In this section I will give an example of how to use FindStuffer v0.0.1. This is not the most recent version but the tutorial is still valid.
 ### Populating with HTTP traffic
 First of all, make sure FindStuffer is loaded into your extender
 ![importing](images/importing.gif)
@@ -32,20 +36,24 @@ Note that :
 - The search bar's text changes to reflect the executed search.
 - The search is executed both on the headers and the body. It is executed on any thing that can be shown in the request & response editors.
 - It is possible to add as many fields as possible (theoretically).
-- This demo only showed AND-based aggregation. The radio buttons in the bottom of the search modal allow you to choose between AND-based and OR-based query aggregation. 
-- Changes made to a text field or a checkbox / radio button in the search modal won't take effect if "OK" isn't used. Simply closing the search modal will make the search modal revert to its previous state (with the exception of keeping the added text fields).
+- This demo only showed AND-based aggregation. The radio buttons in the bottom of the search dialog allow you to choose between AND-based and OR-based query aggregation. 
+- Changes made to a text field or a checkbox / radio button in the search dialog won't take effect if "OK" isn't used. Simply closing the search dialog will make the search dialog revert to its previous state (with the exception of keeping the added text fields).
 - An empty text field (with no whitespace) is ignored.
 
 ## Installation
 At this moment, you need to import manually a JAR to your Burp from Extender → Extensions → Add. You can compile this code to create the JAR or you can use the one in this project's releases page. 
 
 ## Contributing
-If you like the extension and the potential it has to be a practical tool you use often, you are very welcome to contribute to this repo by submitting a pull request. You can also open issues if you encounter bugs or have interesting feature ideas.
+If you like the extension and the potential it has to be a practical tool you use often, you are very welcome to contribute to this repo. You can contribute either by giving feedback, requesting features, reporting bugs, or picking an idea from this README / from Github issues and making a pull request.
 
-### Possible improvements
-This section is about features that I recognize as potentially useful and intend to work on some time, without them being a priority. Some of these features can be replaced by clever use of the basic features already implemented. Some do add a lot of value but will need a serious amount of work.
+### Dev & debug env setup
+TODO : update this with more details if someone actually wants to dev
 
-This section should be replaced by Github issues later.
+You need to add burp's JAR as an external library in your IDE's project, and then you use that main function I left in the BurpExtender class to launch Burp from inside the IDE. After that you'll be able to see the stacktraces, set breakpoints, etc.
+
+### Possible improvements 
+This section is about features that are could be useful but are not considered _yet_ for developments in the near future.  Features that are being currently worked on are in Github's issues.
+
 #### Unclumsify UI code
 Several Java Swing interfaces were not correctly used in this code, mainly due to the my ignorance when it comes to UI and Java Swing. It is possible that code is very clumsy and that it reimplemented stuff it shouldn't have. But it seemed easier to implement my own sorting / filtering than to learn Swing's seemingly complicated interface, especially in the beginning when I didn't know how to debug the extension in my IDE and didn't have access to any error messages, just failures.
 
@@ -56,8 +64,6 @@ It would be nice if the extension registers a proxy or HTTP listener to refresh 
 - take into account existing sorting and filtering
 - be memory-efficient
 A clever implementation of this could take some serious amount of work.
-#### Case-sensitive search
-It is not possible to do case-sensitive queries at the moment. Some UI should be made for this.
 #### Global negative search
 Besides the negative query option available for each individual text field, implement the possibility of inverting the whole search. This is not really essential because the currently implemented filters allow to do equivalent searches (De Morgan's laws). But still, could be nice.
 #### Columns
@@ -67,7 +73,4 @@ This is not the aim of this extension, but might as well make it more practical.
 #### Improve UI and UX
 This is really not my area and I hate it. But my extension is indeed kinda ugly.
 
-### Dev & debug env setup
-TODO : update this with more details if someone actually wants to contribute
 
-You need to add burp's JAR as an external library in your IDE's project, and then you use that main function I left in the BurpExtender class to launch Burp from inside the IDE. After that you'll be able to see the stacktraces, set breakpoints, etc.
